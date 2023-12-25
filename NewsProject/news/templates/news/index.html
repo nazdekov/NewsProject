@@ -1,0 +1,98 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_javascript %}
+{% block title %}Все новости{% endblock %}
+
+<!-- {% block slider %}
+{% endblock %} -->
+
+{% block content %}
+
+<!-- Delicious area start  -->
+<div class="Delicious_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section_title text-center mb-30">
+                    <h3>Вкусные новости для вас</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section_title text-center mb-50">
+                    <label><h2> Фильтры: (Всего: {{ total }} результатов) </h2>
+                        <form method="post">
+                            {% csrf_token %}
+                                    <div class="form-group col-11">
+                                        <select class="form-select" name="author_filter" style="width:40%">
+                                            <option value="0">Все авторы</option>
+                                            {% for author in author_list %}
+                                            <option value="{{ author.id }}" {% if selected_author == author.id %} selected {% endif %}> {{ author.username }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                        <select class="form-select" name="category_filter" style="width:40%">
+                                            <option value="0">Все категории</option>
+                                            {% for c in categories %}
+                                            <option value="{{ forloop.counter }}" {% if selected_category == forloop.counter %} selected {% endif %}> {{ c.1 }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                        <button class="buttn2 boxed-button2 my-2 my-sm-0" type="submit">Применить</button>
+                                    </div>
+                        </form>
+                    </label>
+ <!--    ниже пагинатор -->
+                {% if total > 1 %}
+                    <div class="container mx-auto">
+                        <div class="row ">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination1">  <!--  blog-pagination  -->
+                                    {% if articles.has_previous %}
+                                        <li class="page-item1"><a class="page-link1" href="?page={{ articles.previous_page_number }}">Previous</a></li>
+                                    {% endif %}
+                                    {% for p in articles.paginator.page_range %}
+                                        {% if articles.number == p %}
+                                            <li class="page-item1"><p class="page-link1" style="color:black;"> {{ p }}</p></li>
+                                        {% else %}
+                                            <li class="page-item1"><a class="page-link1" href="?page={{ p }}"> {{ p }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if articles.has_next %}
+                                        <li class="page-item1"><a class="page-link1" href="?page={{ articles.next_page_number }}">Next</a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-xl-6 col-md-6 col-lg-6">
+                    <a href="{{ article.get_absolute_url }}">
+                    <div class="single_delicious d-flex align-items-center">
+                        <div class="thumb">
+                            <img src="{{ article.image_set.all.0.image.url }}" alt="{{ article.title }}">
+                        </div>
+                        <div class="info">
+                            <h3>#{{ article.id }}. {{ article.title }}</h3>
+                            <p>{{ article.anouncement }}</p>
+                            <span>{{ article.date }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

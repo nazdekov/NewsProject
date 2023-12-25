@@ -1,0 +1,88 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_javascript %}
+{% block title %} Главная страница {% endblock %}
+
+
+<!--
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous">
+</script> -->
+
+{% block content %}
+<div class="about_area">
+    <div class="icon_1 d-none d-md-block">
+        <img src="{% static 'main' %}/img/icon/1.png" width="auto" height="50" alt="">
+    </div>
+    <div class="icon_2 d-none d-md-block">
+        <img src="{% static 'main' %}/img/icon/2.png" width="auto" height="50" alt="">
+    </div>
+    <div class="icon_3 d-none d-md-block">
+        <img src="{% static 'main' %}/img/icon/3.png" width="auto" height="50" alt="">
+    </div>
+
+                                <!-- Slider -->
+                                <div class="thumb">
+                                    {% if article.image_set.all %}
+                                        <div id="carouselControls" class="carousel slide" data-ride="carousel">
+                                            <div class="carousel-inner" role="listbox" style=" width:auto; height: 300px; !important;">
+                                                {% for image in article.image_set.all %}
+                                                <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
+                                                    <img class="d-block" src="{{ image.image.url }}"
+                                                         style="margin:auto; height:300px; width:auto; border-radius:5px;">
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                            <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+                                                <span class="carousel-control-prev-icon" style="background: #DB9A64" aria-hidden="true"></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+                                                <span class="carousel-control-next-icon" style="background: #DB9A64" aria-hidden="true"></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </div>
+                                    {% endif%}
+                                </div>
+                                <!-- /Slider -->
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="about_info_wrap">
+                    <h3>{{ article.title }}</h3>
+                    <span class="long_dash"></span>
+                    <h4>{{ article.anouncement }}</h4>
+                    <p>{{ article.text }}</p><br>
+                    <h5>Автор: {{ article.author }}</h5>
+                    <h5>Теги: {% for t in article.tags.all %} {{ t.title }} {% endfor %}</h5>
+                    {% if request.user.id  == article.author.id %}
+                        <a class="btn btn-outline-primary rounded-pill" href="{% url 'news_update' article.pk %}">
+                            Редактировать статью</a>
+                        <a class="btn btn-outline-danger rounded-pill" href="{% url 'news_delete' article.pk %}">
+                            Удалить статью</a>
+                    {% endif %}
+
+
+                    {% if request.user.id %}
+                        {{bookmark}}
+                        <a class="{% if bookmark %}btn btn-warning{% else %}btn btn-outline-warning{% endif %}" href="{% url 'favorites' article.pk %}">
+                            {% if bookmark %}В избранном{% else %}В избранное{% endif %}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

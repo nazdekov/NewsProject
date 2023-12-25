@@ -1,0 +1,116 @@
+{% load static %}
+{% load users_extras %}
+
+<script>
+  $(function() {
+    $("#search_input").autocomplete({
+      source: "{% url 'search_auto' %}",
+      select: function (event, ui) { //item selected
+        AutoCompleteSelectHandler(event, ui)
+      },
+      minLength: 2,
+    });
+  });
+
+  function AutoCompleteSelectHandler(event, ui)
+  {
+    var selectedObj = ui.item;
+  }
+</script>
+
+
+
+<!-- header-start -->
+<header>
+    <div class="header-area">
+        <div id="sticky-header" class="main-header-area">
+            <div class="container-fluid p-0">
+                <div class="header_bottom_border">
+                    <div class="row align-self-start no-gutters">
+                        <div class="mx-auto col-xl-2 col-lg-2">
+                            <div class="logo">
+                                <a href="{% url 'home' %}">
+                                        <img src="{% static 'main' %}/img/logo.png" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xl-10 col-lg-10">
+                            <div class="main-menu  d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">
+                                        <li><a href="{% url 'home' %}">Главная</a></li>
+                                        <li><a href="{% url 'news_index' %}">Все новости</a></li>
+                                        <li>
+                                            <form class="form-inline" action="{% url 'search' %}" method="post" style="width: 250px">
+                                            {% csrf_token %}
+                                                <input class="form-search mr-sm-2" id="search_input" name="search_input" type="search" placeholder="Поиск" aria-label="Search">
+                                                <button class="buttn2 boxed-button2 my-2 my-sm-0" type="submit">Поиск</button>
+                                            </form>
+                                        </li>
+                                        <li class="nav-item dropup">
+                                            <a class="nav-link dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                            Информация</a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="{% url 'about' %}">О нас</a>
+                                                <a class="dropdown-item" href="{% url 'contacts' %}">Контакты</a>
+                                            </div>
+                                        </li>
+
+
+                                        {% if request.user.id %}  <!-- проверяем аутентификацию-->
+                                            <li class="nav-item dropup">
+                                                <a class="nav-link dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                    <img src="{{ request.user.account.account_image.url }}" alt="" width="25" height="25" class="rounded-circle me-2">
+                                                    {{ request.user.username }}
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                    {% if user.is_superuser or user.is_staff %}
+                                                    <a class="dropdown-item" href="/admin/">Админка</a>
+                                                    {% endif %}
+                                                    {% if request.user|has_group:"Authors" %}
+                                                    <a class="dropdown-item" href="{% url 'news_create' %}">Создать статью</a>
+                                                    <a class="dropdown-item" href="{% url 'my_news_list' %}">Мои статьи</a>
+                                                    {% endif %}
+                                                    <a class="dropdown-item" href="{% url 'profile' %}">Мой аккаунт</a>
+
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="{% url 'logout' %}">Выход</a>
+                                                </div>
+                                            </li>
+                                        {% else %} <!-- ссылки на регистрацию и аутентификацию-->
+                                            <li class="nav-item dropup">
+                                                <a class="nav-link dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                    <img src="/media/default.jpg" alt="" width="25" height="25" class="rounded-circle me-2">
+                                                    Аноним
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                  <a class="dropdown-item" href="{% url 'registration' %}">Регистрация</a>
+                                                  <div class="dropdown-divider"></div>
+                                                  <a class="dropdown-item" href="{% url 'login' %}">Вход</a>
+                                                </div>
+                                            </li>
+                                        {% endif %}
+
+                                        <br>
+                                        {% if messages %}
+                                            {% for message in messages %}
+                                                <div class="alert alert-{{ message.tags }}">
+                                                      {{ message }}
+                                                 </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- header-end -->

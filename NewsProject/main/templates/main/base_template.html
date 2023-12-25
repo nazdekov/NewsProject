@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load users_extras %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Новостной портал{% endblock %}</title>
+    <meta name="description" content="{% block description %} Описание {% endblock %}">
+    <meta name="keywords" content="{% block keywords %} Ключевые слова {% endblock %}">
+
+    <!-- <link rel="manifest" href="site.webmanifest"> -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'main' %}/img/favicon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{% static 'main' %}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'main' %}/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="{% static 'main' %}/css/magnific-popup.css">
+    <link rel="stylesheet" href="{% static 'main' %}/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'main' %}/css/themify-icons.css">
+    <link rel="stylesheet" href="{% static 'main' %}/css/gijgo.css">
+    <!-- <link rel="stylesheet" href="{% static 'main' %}/css/nice-select.css"> -->
+    <link rel="stylesheet" href="{% static 'main' %}/css/flaticon.css">
+    <link rel="stylesheet" href="{% static 'main' %}/css/slicknav.css">
+    <!-- <link rel="stylesheet" href="{% static 'main' %}/css/style_sidebar.css"> -->
+    <link rel="stylesheet" href="{% static 'main' %}/css/style.css">
+    <!-- <link rel="stylesheet" href="{% static 'main' %}/css/responsive.css"> -->
+    <script src="https://kit.fontawesome.com/a97047fead.js" crossorigin="anonymous"></script>
+
+    <!-- CSS Search !-->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <!-- jQuery Search !-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+    <!-- jQuery UI Search !-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+<!--[if lte IE 9]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+<![endif]-->
+
+{% include 'main/header.html' %}
+
+
+{% block content %}{% endblock %}
+
+
+{% block foot %}
+    {% include 'main/foot.html' %}
+{% endblock %}
+
+
+</body>
+</html>
+
+

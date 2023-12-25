@@ -1,0 +1,24 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load crispy_forms_tags %}
+{% block title %} Страница обратной связи {% endblock %}
+
+{% block content %}
+<div class="Delicious_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section_title text-center mb-50">
+                    <h3>Страница обратной связи</h3>
+                    <form method="post" class="contact_form">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <input type="submit" class="btn btn-success" value = "Отправить">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

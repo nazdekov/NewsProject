@@ -1,0 +1,142 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+{% block title %}Контакты{% endblock %}
+
+{% block content %}
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_2">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3>Контакты</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ bradcam_area  -->
+
+<!-- ================ contact section start ================= -->
+<section class="contact-section">
+    <div class="container">
+        <div class="d-none d-sm-block mb-5 pb-4">
+            <div id="map" style="height: 480px; position: relative; overflow: hidden;"> </div>
+            <script src="https://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
+            {% comment %}<script src="https://yandex.st/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>{% endcomment %}
+            <script type="text/javascript">
+ymaps.ready(init);
+
+function init () {
+    var myMap = new ymaps.Map("map", {
+            center: [59.760493, 60.207504],
+            zoom: 17
+        }),
+        myPlacemark = new ymaps.Placemark([59.760493, 60.207504], {
+            // Чтобы балун и хинт открывались на метке, необходимо задать ей определенные свойства.
+            balloonContentHeader: "Наше местоположение",
+            balloonContentBody: "<em>г. Краснотурьинск, ул. такая-то, д. такой-то</em>",
+            balloonContentFooter: "Ждём Вас!",
+            hintContent: "Мы здесь!"
+        });
+	// элемента управления и его параметры.
+    myMap.controls
+        // Кнопка изменения масштаба.
+        .add('zoomControl', { left: 5, top: 5 })
+        // Список типов карты
+        .add('typeSelector')
+        // Кнопка изменения масштаба - компактный вариант.
+        // Расположим её справа.
+        .add('smallZoomControl', { right: 5, top: 75 })
+        // Стандартный набор кнопок
+        .add('mapTools', { left: 35, top: 5 });
+    myMap.geoObjects.add(myPlacemark);
+
+    // Показываем хинт на карте (без привязки к геообъекту).
+    myMap.hint.show(myMap.getCenter(), "Содержимое хинта", {
+        // Опция: задержка перед открытием.
+        showTimeout: 1500
+    });
+}
+</script>
+
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h2 class="contact-title">Напишите нам</h2>
+            </div>
+            <div class="col-lg-8">
+                <form class="form-contact contact_form" action="" method="post" novalidate="novalidate">
+                    {% csrf_token %}
+                    {% if success %}
+                        <div class="alert alert-danger">
+                            <strong>Спасибо за сообщение!</strong>
+                        </div>
+                    {% else %}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    {{ form.message }}
+                                </div>
+                                {% if form.message.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ form.message.errors }}</strong>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    {{ form.name }}
+                                </div>
+                                {% if form.name.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ form.name.errors }}</strong>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    {{ form.email }}
+                                </div>
+                                {% if form.email.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ form.email.errors }}</strong>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <button type="submit" class="button button-contactForm boxed-btn">Отправить</button>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+            <div class="col-lg-3 offset-lg-1">
+                <div class="media contact-info">
+                    <span class="contact-info__icon"><i class="ti-home"></i></span>
+                    <div class="media-body">
+                        <h3>ул. Мира, д.8.</h3>
+                        <p>г. Краснотурьинск</p>
+                    </div>
+                </div>
+                <div class="media contact-info">
+                    <span class="contact-info__icon"><i class="ti-home"></i></span>
+                    <div class="media-body">
+                        <h3>ул. Мира, д.88.</h3>
+                        <p>г. Краснотурьинск</p>
+                    </div>
+                </div>
+                <div class="media contact-info">
+                    <span class="contact-info__icon"><i class="ti-home"></i></span>
+                    <div class="media-body">
+                        <h3>ул. Мира, д.888.</h3>
+                        <p>г. Краснотурьинск</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ contact section end ================= -->
+{% endblock %}

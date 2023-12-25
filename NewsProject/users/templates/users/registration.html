@@ -1,0 +1,42 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load crispy_forms_tags %}
+{% block title %} Регистрация{% endblock %}
+
+{% block content %}
+<div class="Delicious_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section_title text-center mb-50">
+                    <h3>Регистрация нового пользователя</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row me-5">
+            <div class="col-md-12 col-lg-12">
+                    <form method="post" class="contact_form">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="form-check">
+                            <h5>Тип аккаунта:</h5>
+                            <div>
+                                <input class="form-check-input" type="radio" id="author" name="account_type" value="author"/>
+                                <label class="form-check-label" for="author">Автор</label>
+                            </div>
+                            <div>
+                                <input class="form-check-input" type="radio" id="reader" name="account_type" value="reader" checked/>
+                                <label class="form-check-label" for="reader" >Читатель</label>
+                             </div>
+                        </div>
+                        <input type="submit" class="btn btn-success" value="Зарегистрировать">
+                    </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

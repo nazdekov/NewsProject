@@ -1,0 +1,26 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load crispy_forms_tags %}
+{% block title %} Удаление аккаунта {% endblock %}
+
+{% block content %}
+<div class="Delicious_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section_title text-center mb-50">
+                    <h3>Вы действительно хотите удалить аккаунт?</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="border-top pt-3">
+                            <a class="btn btn-outline-danger" href="{% url 'profile_delete' %}" style="margin-bottom:15px;" type="submit">Удалить профиль</a>
+                            <a class='btn btn-outline-warning' href="{% url 'profile' %}" style="margin-bottom:15px;">Отмена</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

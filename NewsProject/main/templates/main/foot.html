@@ -1,0 +1,121 @@
+{% load static %}
+
+<!-- footer_start  -->
+<footer class="footer">
+    <div class="footer_top">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 col-md-6 col-lg-3 ">
+                    <div class="footer_widget">
+                        <div class="footer_logo">
+                            <a href="#">
+                                <img src="{% static 'main' %}/img/footer_logo.png" alt="">
+                            </a>
+                        </div>
+                        <p>ул. Мира, д.8 <br> г. Краснотурьинск <br>
+                            <a href="#">+7 343 123 45 67</a> <br>
+                            <a href="#">manager@example.com</a>
+                        </p>
+                        <div class="socail_links">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <i class="ti-facebook"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="ti-twitter-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-instagram"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-pinterest"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-youtube-play"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-6 col-lg-4 offset-xl-1">
+                    <div class="footer_widget">
+                        <h3 class="footer_title">
+                            Полезные ссылки
+                        </h3>
+                        <ul>
+                            <li><a href="{% url 'home' %}">Главная</a></li>
+                            <li><a href="{% url 'about' %}">О нас</a></li>
+                            <li><a href="{% url 'contacts' %}">Контакты</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copy-right_text">
+        <div class="container">
+            <div class="footer_border"></div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <p class="copy_right text-center">
+                        Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer_end  -->
+
+<!-- JS here -->
+<script src="{% static 'main' %}/js/popper.min.js"></script>
+<script src="{% static 'main' %}/js/bootstrap.min.js"></script>
+<script src="{% static 'main' %}/js/jquery.slicknav.min.js"></script>
+<script src="{% static 'main' %}/js/main.js"></script>
+
+
+
+
+{% comment %}
+<script src="{% static 'main' %}/js/vendor/jquery-1.12.4.min.js"></script>
+
+
+<!-- jQuery Search !-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+<!-- jQuery UI Search !-->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+
+<script src="{% static 'main' %}/js/vendor/modernizr-3.5.0.min.js"></script>
+<script src="{% static 'main' %}/js/plugins.js"></script>
+<script src="{% static 'main' %}/js/jquery.magnific-popup.min.js"></script>
+<script src="{% static 'main' %}/js/nice-select.min.js"></script>
+<script src="{% static 'main' %}/js/gijgo.min.js"></script>
+<script src="{% static 'main' %}/js/wow.min.js"></script>
+<script src="{% static 'main' %}/js/jquery.scrollUp.min.js"></script>
+<script src="{% static 'main' %}/js/scrollIt.js"></script>
+<script src="{% static 'main' %}/js/imagesloaded.pkgd.min.js"></script>
+<script src="{% static 'main' %}/js/jquery.counterup.min.js"></script>
+<script src="{% static 'main' %}/js/waypoints.min.js"></script>
+<script src="{% static 'main' %}/js/ajax-form.js"></script>
+<script src="{% static 'main' %}/js/isotope.pkgd.min.js"></script>
+<script src="{% static 'main' %}/js/owl.carousel.min.js"></script>
+
+<!--contact js-->
+<script src="{% static 'main' %}/js/mail-script.js"></script>
+<script src="{% static 'main' %}/js/jquery.validate.min.js"></script>
+<script src="{% static 'main' %}/js/jquery.form.js"></script>
+<script src="{% static 'main' %}/js/jquery.ajaxchimp.min.js"></script>
+<script src="{% static 'main' %}/js/contact.js"></script>
+{% endcomment %}
+

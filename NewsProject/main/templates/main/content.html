@@ -1,0 +1,49 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+{% block title %} КонтентиЩе {% endblock %}
+
+{% block content %}
+Вот так и КонтентиЩе...
+
+<div class="col-md-6 col-sm-8">
+    <table class="table table-dark table-striped-columns" border="1">
+        <thead>
+        <tr align="center">
+            <th scope="col">Заголовок таблицы контента № 1</th>
+            <th scope="col">Заголовок таблицы контента № 2</th>
+            <th scope="col">Заголовок таблицы контента № 3</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td align="right">Ячейка А.</td>
+                <td align="center">Ячейка Б.</td>
+                <td align="left">Ячейка В.</td>
+            </tr>
+            <tr>
+                <td colspan="3"> Ячейка Г.</td>
+            </tr>
+            <tr>
+                <td colspan="2"> Ячейка Е.</td>
+                <td colspan="1"> Ячейка Ё.</td>
+            </tr>
+            <tr>
+                <td colspan="1"> Ячейка Ж.</td>
+                <td colspan="2"> Ячейка З.</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<table class="table table-striped table-hover">
+  ...
+</table>
+
+
+
+
+{% endblock %}
+
+
+
+

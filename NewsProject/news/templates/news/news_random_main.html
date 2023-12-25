@@ -1,0 +1,17 @@
+<div class="row">
+    {% for article in articles %}
+        <div class="col-xl-6 col-md-6 col-lg-6">
+            <a href="{{ article.get_absolute_url }}">
+            <div class="single_delicious d-flex align-items-center">
+                <div class="thumb">
+                    <img src="{{ article.image_set.all.0.image.url }}" alt="{{ article.title }}">
+                </div>
+                <div class="info">
+                    <h3>#{{ article.id }}. {{ article.title }}</h3>
+                    <p>{{ article.anouncement }}</p>
+                    <span>{{ article.date }}</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
