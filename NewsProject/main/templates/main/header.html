@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="col-xl-10 col-lg-10">
-                            <div class="main-menu  d-none d-lg-block">
+                            <div class="main-menu d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
                                         <li><a href="{% url 'home' %}">Главная</a></li>
@@ -96,17 +96,18 @@
                                             {% for message in messages %}
                                                 <div class="alert alert-{{ message.tags }}">
                                                       {{ message }}
-                                                 </div>
+                                                </div>
                                             {% endfor %}
                                         {% endif %}
                                     </ul>
                                 </nav>
                             </div>
                         </div>
-
+                        {% comment %}{% endcomment %}
                         <div class="col-12">
                             <div class="mobile_menu d-block d-lg-none"></div>
                         </div>
+
                     </div>
                 </div>
             </div>

@@ -23,6 +23,7 @@ import main.views as main_views
 handler404 = main_views.custom_404
 
 urlpatterns = [
+    path('update_server/', main_views.update_server, name='update_server'),
     path('admin/', admin.site.urls),
     path('', include('main.urls')),    #http://127.0.0.1:8000/
     path('news/', include('news.urls')),

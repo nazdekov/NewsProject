@@ -76,7 +76,8 @@
 
                     {% if request.user.id %}
                         {{bookmark}}
-                        <a class="{% if bookmark %}btn btn-warning{% else %}btn btn-outline-warning{% endif %}" href="{% url 'favorites' article.pk %}">
+                        <a class="{% if bookmark %}btn btn-warning{% else %}btn btn-outline-warning{% endif %}"
+                           href="{% url 'favorites' article.pk %}">
                             {% if bookmark %}В избранном{% else %}В избранное{% endif %}</a>
                     {% endif %}
                 </div>

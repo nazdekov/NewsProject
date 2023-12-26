@@ -82,7 +82,7 @@
                     <a href="{{ article.get_absolute_url }}">
                     <div class="single_delicious d-flex align-items-center">
                         <div class="thumb">
-                            <img src="{{ article.image_set.all.0.image.url }}" alt="{{ article.title }}">
+                            <img src="{{ article.image_set.all.0.image.url }}" alt="{{ article.title }}" style="height:200px; width:auto;">
                         </div>
                         <div class="info">
                             <h3>#{{ article.id }}. {{ article.title }}</h3>

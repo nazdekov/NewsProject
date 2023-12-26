@@ -21,11 +21,12 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex flex-column align-items-center text-center">
-                                            <img src="{{ request.user.account.account_image.url }}" alt="{{ request.user.username }}" height="150">
+                                            <img src="{{ request.user.account.account_image.url }}" alt="{{ request.user.username }}" style="height:150px; width:auto;">
+                                            <br>
                                             {{ account_form.account_image }}
                                             <div class="mt-3">
                                                 <h4> {{ user_form.username }}</h4>
-                                                <p class="text-secondary mb-1"> {% if request.user.is_staff %} Автор {% endif %}</p>
+                                                <p class="text-secondary mb-1"> {% if request.user.is_staff %} Автор {% else %} Читатель {% endif %}</p>
                                             </div>
                                         </div>
                                     </div>
