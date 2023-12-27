@@ -29,6 +29,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 
 # Для проверки своей страницы 404, конфигурация такая:
+# python manage.py runserver --insecure
 # DEBUG = False
 # ALLOWED_HOSTS = ["*"]
 #В режиме отладки такая:

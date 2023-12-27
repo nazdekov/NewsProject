@@ -71,8 +71,6 @@ class ArticleDetailView(ViewCountMixin, DetailView):
 
 
 
-
-
 class ArticleUpdateView(UpdateView):
     model = Article
     template_name = 'news/create_article.html'
@@ -87,7 +85,7 @@ class ArticleUpdateView(UpdateView):
     def post(self, request, **kwargs):
         current_object = Article.objects.get(id=request.POST['image_set-0-article'])
         deleted_ids = []
-        for i in range(int(request.POST['image_set-TOTAL_FORMS'])): #удаление всех по галочкам
+        for i in range(int(request.POST['image_set-TOTAL_FORMS'])): #удаление всем по галочкам
             field_delete = f'image_set-{i}-DELETE'
             field_image_id = f'image_set-{i}-id'
             if field_delete in request.POST and request.POST[field_delete] == 'on':
@@ -145,14 +143,9 @@ def create_article(request):
         form = ArticleForm()
     return render(request, 'news/create_article.html', {'form': form})
 
-from time import time
-
-from django.core.paginator import Paginator
-# def pagination(request):
-#     articles = Article.objects.all()
-
 
 #from django.db.models import Q
+from django.core.paginator import Paginator
 
 def news_index(request):
     categories = Article.categories #создали перечень категорий
@@ -160,8 +153,8 @@ def news_index(request):
     if request.method == "POST":
         selected_author = int(request.POST.get('author_filter'))
         selected_category = int(request.POST.get('category_filter'))
-        request.session['selected_author'] = selected_author
-        request.session['selected_category'] = selected_category
+        request.session['author_filter'] = selected_author
+        request.session['category_filter'] = selected_category
         if selected_author == 0: #выбраны все авторы
             articles = Article.objects.all()
         else:
@@ -169,34 +162,36 @@ def news_index(request):
         if selected_category != 0: #фильтруем найденные по авторам результаты по категориям
             articles = articles.filter(category__icontains=categories[selected_category-1][0])
     else: # Если метод запроса "GET", то:    # страница открывется впервые;    # нас переадресовала сюда функция поиска;    # листаем фильтрованные страницы (Paginator)
-        ## Фильтр по автору
-        #selected_author = request.session.get('selected_author')
-        #print('!!!!!!!!!!!!!!!!!!!!!!', 'selected_author', selected_author)
-        #if selected_author != None: #если не пустое - находим нужные новости
-        #    articles = Article.objects.filter(author=selected_author)
-        #else:
-        #    selected_author = 0
-        #
-        ## Фильтр по категории
-        #selected_category = request.session.get('selected_category')
-        #print('!!!!!!!!!!!!!!!!!!!!!!', 'selected_category', selected_category)
-        #if selected_category != None: #если не пустое - находим нужные категории
-        #    articles = Article.objects.filter(category=selected_category)
-        #else:
-        #    selected_category = 0
-
-        selected_author = 0
-        selected_category = 0
 
         # Фильтр по поиску
-        search_input = request.session.get('search_input') #вытаскиваем из сессии значение поиска
+        search_input = request.session.get('search_input')  # вытаскиваем из сессии значение поиска
         print('!!!!!!!!!!!!!!!!!!!!!!', 'search_input', search_input)
-        if search_input != None: #если не пустое - находим нужные новости
+        if search_input != None:  # если не пустое - находим нужные новости
             articles = Article.objects.filter(title__icontains=search_input)
-            #del request.session['search_input'] #чистим сессию, чтобы этот фильтр не "заело"
-        else:
-            #если не оказалось таокго ключика или запрос был кривой - отображаем все элементы
+            selected_author = 0
+            selected_category = 0
+            del request.session['search_input'] #чистим сессию, чтобы этот фильтр не "заело"
+        else:   # если это не поисковый запрос, а переход по пагинатору или первое открытие
             articles = Article.objects.all()
+            selected_author = request.session.get('author_filter')
+            selected_category = request.session.get('category_filter')
+
+            # Фильтр по автору
+            print('!!!!!!!!!!!!!!!!!!!!!!', 'selected_author', selected_author)
+            if selected_author != None and int(selected_author) != 0: #если не пустое - находим нужные новости
+                articles = articles.filter(author=selected_author)
+            else:
+                selected_author = 0
+
+            # Фильтр по категории
+            print('!!!!!!!!!!!!!!!!!!!!!!', 'selected_category', selected_category)
+            if selected_category != None and int(selected_category) != 0: #если не пустое - находим нужные категории
+                articles = articles.filter(category__icontains=categories[selected_category - 1][0])
+            else:
+                selected_category = 0
+
+
+
     #сортировка от свежих к старым новостям
     articles = articles.order_by('-date')
     total = len(articles)

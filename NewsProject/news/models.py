@@ -6,6 +6,10 @@ import datetime
 import os
 import shutil
 
+from django.conf import settings
+
+base_dir = settings.MEDIA_ROOT
+
 class Tag(models.Model):
     title = models.CharField(max_length=80)
     status = models.BooleanField(default=True)
@@ -118,6 +122,7 @@ class ViewCount(models.Model):
                                 related_name='views')
     ip_address = models.GenericIPAddressField()
     view_date = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
 
     class Meta:
         ordering = ('-view_date',)

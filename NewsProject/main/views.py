@@ -43,27 +43,6 @@ def update_server(request):
         return HttpResponse("Вы попали не туда")
 
 
-
-#def index(request):
-#    news_it = Article.objects.filter(category__exact='IT').order_by('?')[:6]
-#    news_math = Article.objects.filter(category__exact='MATH').order_by('?')[:6]
-#    news_ai = Article.objects.filter(category__exact='AI').order_by('?')[:6]
-#    context = {'news_it': news_it, 'news_math': news_math, 'news_ai': news_ai}
-#    return render(
-#        request,
-#        'main/index.html',
-#        context=context
-#    )
-
-# def detail(request,id):
-#     #пример итерирования по объектам QuerySet
-#     newsitems = NewsItem.objects.all()
-#     s = ''
-#     for newsitem in newsitems:
-#         if id == newsitem.id:
-#             s += f'<h1>{newsitem.title}</h1><br> <p> Страница на доработке </p>'
-#     return HttpResponse(s)
-
 def about(request):
     return render(
         request,
@@ -102,7 +81,8 @@ def send_message(name, email, message):
     msg.send()
 
 def custom_404(request, exception):
-    return HttpResponse(f'Вот-так-так! Что-то пошло не так: {exception}')
+    context = {}
+    return render(request, 'main/404.html', context)
 
 def get_calc(request, a, operation, b):
     match operation:                    # match - это вместо if, elif, else

@@ -46,13 +46,13 @@
                         </form>
                     </label>
  <!--    ниже пагинатор -->
-                {% if total > 1 %}
+                {% if total > 6 %}
                     <div class="container mx-auto">
                         <div class="row ">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination1">  <!--  blog-pagination  -->
                                     {% if articles.has_previous %}
-                                        <li class="page-item1"><a class="page-link1" href="?page={{ articles.previous_page_number }}">Previous</a></li>
+                                        <li class="page-item1"><a class="page-link1" href="?page={{ articles.previous_page_number }}"> << </a></li>
                                     {% endif %}
                                     {% for p in articles.paginator.page_range %}
                                         {% if articles.number == p %}
@@ -62,7 +62,7 @@
                                         {% endif %}
                                     {% endfor %}
                                     {% if articles.has_next %}
-                                        <li class="page-item1"><a class="page-link1" href="?page={{ articles.next_page_number }}">Next</a></li>
+                                        <li class="page-item1"><a class="page-link1" href="?page={{ articles.next_page_number }}"> >> </a></li>
                                     {% endif %}
                                 </ul>
                             </nav>

@@ -1,0 +1,24 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_javascript %}
+{% block title %} Страница не найдена {% endblock %}
+
+
+{% block content %}
+
+<div class="Delicious_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section_title text-center mb-30">
+                    <h3>Страница не найдена</h3>
+                    <br>
+                    <img src="{% static 'main/img/elements/404.png' %}" style="height:60%; width:auto;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
