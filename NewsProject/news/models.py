@@ -39,7 +39,7 @@ class Article(models.Model):
                   ('AI', 'AI')]
     #поля                           #models.CASCADE SET_DEFAULT    # Если пользователь удалится, то удалятся все его новости
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='Автор')    # Если пользователь удалится, то данное поле будет NULL
-    title = models.CharField('Название', max_length=50, default='')
+    title = models.CharField('Название', max_length=50)
     anouncement = models.TextField('Аннотация', max_length=250)
     text = models.TextField('Текст новости')
     date = models.DateTimeField('Дата публикации', auto_now=True)
@@ -79,9 +79,9 @@ class Article(models.Model):
     def delete(self, *args, **kwargs):
         """для автоматического удаления папки с изображениями статьи"""
         dir_path = f"article_images/article_{self.pk}"
-        ar_dir = os.path.join(base_dir, dir_path)
-        if os.path.exists(ar_dir):
-            shutil.rmtree(ar_dir)
+        article_dir = os.path.join(base_dir, dir_path)
+        if os.path.exists(article_dir):
+            shutil.rmtree(article_dir)
 
         super(Article, self).delete(*args, **kwargs)
 
@@ -99,7 +99,7 @@ class Image(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, blank=True)
     #image = models.ImageField(upload_to='article_images/')    # лучше добавить поле default !!!
-    image = models.ImageField(upload_to=folder_path)     # лучше добавить поле default !!!
+    image = models.ImageField(default='default_article_img.png', upload_to=folder_path)     # лучше добавить поле default !!!
     objects = models.Manager()
 
     def __str__(self):

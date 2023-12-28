@@ -9,6 +9,7 @@
                 <div class="info">
                     <h3>#{{ article.id }}. {{ article.title }}</h3>
                     <p>{{ article.anouncement }}</p>
+                    <p><small>Просмотры: {{ article.get_views }}</small></p>
                     <span>{{ article.date }}</span>
                 </div>
             </div>
