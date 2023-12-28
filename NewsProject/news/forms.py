@@ -30,13 +30,14 @@ ImagesFormSet = inlineformset_factory(Article, Image, fields=("image",), extra=1
 
 
 class ArticleForm(ModelForm):
+
     image_field = MultipleFileField()
     class Meta:
         model = Article
         fields = ['title', 'anouncement', 'text', 'tags', 'category']
         widgets = {
             'anouncement': Textarea(attrs={'cols': 80, 'rows': 2}),
-            'text': Textarea(attrs={'cols': 80, 'rows': 2}),
+            'text': Textarea(attrs={'cols': 80, 'rows': 5}),
             'tags': CheckboxSelectMultiple(),
             'category': forms.Select(attrs={"class": "form-control"}),
         }

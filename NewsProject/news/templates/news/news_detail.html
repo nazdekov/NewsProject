@@ -64,9 +64,11 @@
                     <h3>{{ article.title }}</h3>
                     <span class="long_dash"></span>
                     <h4>{{ article.anouncement }}</h4>
-                    <p>{{ article.text }}</p><br>
+                    <h4>{{ article.text }}</h4>
+                    <br>
                     <h5>Автор: {{ article.author }}</h5>
                     <h5>Теги: {% for t in article.tags.all %} {{ t.title }} {% endfor %}</h5>
+                    <h5>Просмотры: {{ article.get_views }}</h5>
                     {% if request.user.id  == article.author.id %}
                         <a class="btn btn-outline-primary rounded-pill" href="{% url 'news_update' article.pk %}">
                             Редактировать статью</a>

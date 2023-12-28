@@ -86,8 +86,9 @@
                         </div>
                         <div class="info">
                             <h3>#{{ article.id }}. {{ article.title }}</h3>
-                            <p>{{ article.anouncement }}</p>
-                            <span>{{ article.date }}</span>
+                            <h4>{{ article.anouncement }}</h4>
+                            <h5>Просмотры: {{ article.get_views }}</h5>
+                            <h5><span>{{ article.date }}</span></h5>
                         </div>
                     </div>
                 </div>
