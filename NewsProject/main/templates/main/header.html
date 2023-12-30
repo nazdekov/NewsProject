@@ -1,25 +1,6 @@
 {% load static %}
 {% load users_extras %}
 
-<script>
-  $(function() {
-    $("#search_input").autocomplete({
-      source: "{% url 'search_auto' %}",
-      select: function (event, ui) { //item selected
-        AutoCompleteSelectHandler(event, ui)
-      },
-      minLength: 2,
-    });
-  });
-
-  function AutoCompleteSelectHandler(event, ui)
-  {
-    var selectedObj = ui.item;
-  }
-</script>
-
-
-
 <!-- header-start -->
 <header>
     <div class="header-area">
@@ -114,4 +95,31 @@
         </div>
     </div>
 </header>
+<!-- search_auto -->
+<script>
+  $(function() {
+    $("#search_input").autocomplete({
+      source: "{% url 'search_auto' %}",
+      select: function (event, ui) { //item selected
+        AutoCompleteSelectHandler(event, ui)
+      },
+      minLength: 2,
+    });
+  });
+
+  function AutoCompleteSelectHandler(event, ui)
+  {
+    var selectedObj = ui.item;
+  }
+</script>
+<!-- /search_auto -->
+<!-- Скрипт для вывода сообщения и его автозакрытия -->
+<script text="javascript">
+    setTimeout(fade_out, 3000);
+    function fade_out() {
+        $(".alert").fadeOut();
+    }
+</script>
+<!-- /Скрипт для вывода сообщения и его автозакрытия -->
+
 <!-- header-end -->

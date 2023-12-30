@@ -1,7 +1,6 @@
 from django import forms
-from django.core.validators import MinLengthValidator
 
-from django.forms import ModelForm, Textarea, CheckboxSelectMultiple,Select
+from django.forms import ModelForm, Textarea, CheckboxSelectMultiple
 from .models import *
 
 class MultipleFileInput(forms.ClearableFileInput):
@@ -36,8 +35,9 @@ class ArticleForm(ModelForm):
         model = Article
         fields = ['title', 'anouncement', 'text', 'tags', 'category']
         widgets = {
-            'anouncement': Textarea(attrs={'cols': 80, 'rows': 2}),
-            'text': Textarea(attrs={'cols': 80, 'rows': 5}),
+            'title': Textarea(attrs={'cols': 80, 'rows': 1, 'minlength': 10}),
+            'anouncement': Textarea(attrs={'cols': 80, 'rows': 2, 'minlength': 10}),
+            'text': Textarea(attrs={'cols': 80, 'rows': 5, 'minlength': 30}),
             'tags': CheckboxSelectMultiple(),
             'category': forms.Select(attrs={"class": "form-control"}),
         }

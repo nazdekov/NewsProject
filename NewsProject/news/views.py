@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.urls import reverse_lazy, reverse
 from .models import *
 from .forms import *
+from users.utils import * #импортировли декоратор
 from django.db import connection, reset_queries
 from django.views.generic import DetailView, DeleteView, UpdateView
 from django.contrib.auth.decorators import login_required
@@ -44,6 +45,13 @@ def search(request):
     else:
         return redirect('home')
 
+
+def get_bookmark_user(request):
+    user = request.user.id
+    print('!!!!!!!!, user: ', user)
+    return user
+
+
 from users.models import FavoriteArticle
 from .utils import ViewCountMixin
 class ArticleDetailView(ViewCountMixin, DetailView):
@@ -54,21 +62,24 @@ class ArticleDetailView(ViewCountMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         current_object = self.object
-        #print('!!!!!!!!!!!!!!!!!!!!!! current_object: ', current_object)
-        images = Image.objects.filter(article=current_object)
+
         #проверям есть ли такая закладка с этой новостью
-        bookmark = FavoriteArticle.objects.filter(article=current_object.pk)
-        print('!!!!!!!!!!!!!!!!, bookmark: ', bookmark.exists())
+
+        # MyFavoriteArticle.objects.filter(user=request.user, article=article).values_list('article__id',flat=True)
+
+
         #user = FavoriteArticle.objects.select_related('user').all() #.filter(user=current_object)
-        #print('!!!!!!!!!!!!!!!!, user: ', current_object.user)
         #Comment.objects.select_related('user', 'article').all()
         #bookmark = FavoriteArticle.objects.filter(user=request.user.id, article=article)
         #article = Article.objects.get(id=id)  Удалить после настройки отображения кнопки избранное
+
+        bookmark = FavoriteArticle.objects.filter(article=current_object.pk)
         context['bookmark'] = bookmark.exists()
+
+
+        images = Image.objects.filter(article=current_object)
         context['images'] = images
         return context
-
-
 
 
 class ArticleUpdateView(UpdateView):
@@ -121,7 +132,6 @@ class ArticleDeleteView(DeleteView):
     template_name = 'news/delete_article.html'
 
 
-from users.utils import check_group #импортировли декоратор
 
 from django.conf import settings
 @login_required(login_url=settings.LOGIN_URL)
@@ -134,6 +144,8 @@ def create_article(request):
             if current_user.id != None: #проверили что не аноним
                 new_article = form.save(commit=False)
                 new_article.author = current_user
+                new_article.date = datetime.date.today()
+                new_article.status = True    # Этот параметр публикует новость без модерации
                 new_article.save() #сохраняем в БД
                 form.save_m2m() #сохраняем теги
                 for img in request.FILES.getlist('image_field'):
@@ -146,10 +158,10 @@ def create_article(request):
 
 #from django.db.models import Q
 from django.core.paginator import Paginator
-
 def news_index(request):
     categories = Article.categories #создали перечень категорий
-    author_list = User.objects.all() #создали перечень авторов
+    author_list = User.objects.filter(article__isnull=False).filter(article__status=True).distinct() #создали перечень авторов
+
     if request.method == "POST":
         selected_author = int(request.POST.get('author_filter'))
         selected_category = int(request.POST.get('category_filter'))
@@ -159,6 +171,7 @@ def news_index(request):
             articles = Article.objects.all()
         else:
             articles = Article.objects.filter(author=selected_author)
+
         if selected_category != 0: #фильтруем найденные по авторам результаты по категориям
             articles = articles.filter(category__icontains=categories[selected_category-1][0])
     else: # Если метод запроса "GET", то:    # страница открывется впервые;    # нас переадресовала сюда функция поиска;    # листаем фильтрованные страницы (Paginator)
@@ -189,8 +202,6 @@ def news_index(request):
                 articles = articles.filter(category__icontains=categories[selected_category - 1][0])
             else:
                 selected_category = 0
-
-
 
     #сортировка от свежих к старым новостям
     articles = articles.order_by('-date')
