@@ -85,8 +85,16 @@
                             <img src="{{ article.image_set.all.0.image.url }}" alt="{{ article.title }}" style="height:200px; width:auto;">
                         </div>
                         <div class="info">
-                            <h3>#{{ article.id }}. {{ article.title }}</h3>
-                            <h4>{{ article.anouncement }}</h4>
+                            {% if article.title|length > 25 %}
+                                <h3>#{{ article.id }}. {{ article.title|slice:":25" }}...</h3>
+                            {% else %}
+                                <h3>#{{ article.id }}. {{ article.title }}</h3>
+                            {% endif %}
+                            {% if article.anouncement|length > 50 %}
+                                <h4>{{ article.anouncement|slice:":50" }}...</h4>
+                            {% else %}
+                                <h4>{{ article.anouncement }}</h4>
+                            {% endif %}
                             <h5>Просмотры: {{ article.get_views }}</h5>
                             <h5><span>{{ article.date }}</span></h5>
                         </div>

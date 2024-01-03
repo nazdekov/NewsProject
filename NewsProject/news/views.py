@@ -27,21 +27,23 @@ def search_auto(request):
 def search(request):
     if request.method == 'POST': #пришел запрос из меню поиска
         value = request.POST['search_input'] #находим новости
-        articles = Article.objects.filter(title__icontains=value)
-        if len(articles) == 1: #если одна- сразу открываем подробное отображение новости
-            return render(request, 'news/news_detail.html', {'article': articles[0]})
-        else:
+        #articles = Article.objects.filter(title__icontains=value)
+        #if len(articles) == 1: #если одна- сразу открываем подробное отображение новости
+        #    return render(request, 'news/news_detail.html', {'article': articles[0]})
+        #else:
             #если несколько - отправляем человека в функцию index со страницей-списком новостей и фильтрами
             #не забываем передать поисковый запрос:
             # либо через сессии:
-            request.session['search_input'] = value
-            return redirect('news_index')
+        #    request.session['search_input'] = value
+        #    return redirect('news_index')
             #либо через фрагмент URLссылки:
             # но в таком случае придётся обрабатывать ссылку в Urls
             #функция reverse из модуля Urls добавит переданные аргументы в качестве get-аргументов.
             # return redirect(reverse('news', kwargs={'search_input':value}))
 
             # return render(request, 'news/news_list.html', {'articles': articles})
+        request.session['search_input'] = value
+        return redirect('news_index')
     else:
         return redirect('home')
 
@@ -54,6 +56,7 @@ def get_bookmark_user(request):
 
 from users.models import FavoriteArticle
 from .utils import ViewCountMixin
+# from .utils import RequestMixin
 class ArticleDetailView(ViewCountMixin, DetailView):
     model = Article
     template_name = 'news/news_detail.html'
@@ -63,22 +66,18 @@ class ArticleDetailView(ViewCountMixin, DetailView):
         context = super().get_context_data(**kwargs)
         current_object = self.object
 
+        # формируем QS-list с id пользователей
+        us = FavoriteArticle.objects.filter(article=current_object.pk).select_related('user').values_list('user__id', flat=True)
+        context['users'] = us
+
         #проверям есть ли такая закладка с этой новостью
-
-        # MyFavoriteArticle.objects.filter(user=request.user, article=article).values_list('article__id',flat=True)
-
-
-        #user = FavoriteArticle.objects.select_related('user').all() #.filter(user=current_object)
-        #Comment.objects.select_related('user', 'article').all()
-        #bookmark = FavoriteArticle.objects.filter(user=request.user.id, article=article)
-        #article = Article.objects.get(id=id)  Удалить после настройки отображения кнопки избранное
-
         bookmark = FavoriteArticle.objects.filter(article=current_object.pk)
         context['bookmark'] = bookmark.exists()
 
-
         images = Image.objects.filter(article=current_object)
         context['images'] = images
+
+        # print('!!!!!!, context', context)
         return context
 
 
@@ -161,19 +160,20 @@ from django.core.paginator import Paginator
 def news_index(request):
     categories = Article.categories #создали перечень категорий
     author_list = User.objects.filter(article__isnull=False).filter(article__status=True).distinct() #создали перечень авторов
+    selected_author = request.session.get('author_filter')
+    selected_category = request.session.get('category_filter')
+    selected_author = 0 if selected_author == None else selected_author
+    selected_category = 0 if selected_category == None else selected_category
 
     if request.method == "POST":
+        search_input = request.session.get('search_input')
+        if search_input != None:  # если не пустое - находим нужные новости
+            del request.session['search_input']  # чистим сессию, чтобы этот фильтр не "заело"
         selected_author = int(request.POST.get('author_filter'))
         selected_category = int(request.POST.get('category_filter'))
         request.session['author_filter'] = selected_author
         request.session['category_filter'] = selected_category
-        if selected_author == 0: #выбраны все авторы
-            articles = Article.objects.all()
-        else:
-            articles = Article.objects.filter(author=selected_author)
-
-        if selected_category != 0: #фильтруем найденные по авторам результаты по категориям
-            articles = articles.filter(category__icontains=categories[selected_category-1][0])
+        return redirect('news_index')
     else: # Если метод запроса "GET", то:    # страница открывется впервые;    # нас переадресовала сюда функция поиска;    # листаем фильтрованные страницы (Paginator)
 
         # Фильтр по поиску
@@ -183,29 +183,32 @@ def news_index(request):
             articles = Article.objects.filter(title__icontains=search_input)
             selected_author = 0
             selected_category = 0
-            del request.session['search_input'] #чистим сессию, чтобы этот фильтр не "заело"
+            #del request.session['search_input'] #чистим сессию, чтобы этот фильтр не "заело"
         else:   # если это не поисковый запрос, а переход по пагинатору или первое открытие
             articles = Article.objects.all()
-            selected_author = request.session.get('author_filter')
-            selected_category = request.session.get('category_filter')
-
-            # Фильтр по автору
-            print('!!!!!!!!!!!!!!!!!!!!!!', 'selected_author', selected_author)
-            if selected_author != None and int(selected_author) != 0: #если не пустое - находим нужные новости
+            if selected_author != 0:  # если не пустое - находим нужные ноновсти
                 articles = articles.filter(author=selected_author)
-            else:
-                selected_author = 0
-
-            # Фильтр по категории
-            print('!!!!!!!!!!!!!!!!!!!!!!', 'selected_category', selected_category)
-            if selected_category != None and int(selected_category) != 0: #если не пустое - находим нужные категории
+            if selected_category != 0:  # фильтруем найденные по авторам результаты по категориям
                 articles = articles.filter(category__icontains=categories[selected_category - 1][0])
-            else:
-                selected_category = 0
 
-    #сортировка от свежих к старым новостям
-    articles = articles.order_by('-date')
+    # фильтр по публикации и сортировка от свежих к старым новостям
+    articles = articles.filter(status='True').order_by('-date')
     total = len(articles)
+    #if total == 1: #если одна- сразу открываем подробное отображение новости
+    #    if search_input != None:  # если не пустое - находим нужные новости
+    #        del request.session['search_input']  # чистим сессию, чтобы этот фильтр не "заело"
+    #    del request.session['author_filter']
+    #    del request.session['category_filter']
+    #    return render(request, 'news/news_detail.html', {'article': articles[0]})
+    #
+    #else:
+    #    p = Paginator(articles, 6)
+    #    page_number = request.GET.get('page')
+    #    page_obj = p.get_page(page_number)
+    #    context = {'articles': page_obj, 'author_list': author_list, 'selected_author': selected_author,
+    #               'categories': categories, 'selected_category': selected_category, 'total': total}
+    #
+    #    return render(request, 'news/index.html', context)
     p = Paginator(articles, 6)
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)
@@ -214,16 +217,22 @@ def news_index(request):
 
     return render(request, 'news/index.html', context)
 
+
+# вывод новостей по категориям, случейные 6
 def main_index(request):
-    it_articles = Article.objects.filter(category__exact='IT').order_by('?')[:6]
-    math_articles = Article.objects.filter(category__exact='MATH').order_by('?')[:6]
-    ai_articles = Article.objects.filter(category__exact='AI').order_by('?')[:6]
+    articles = Article.objects.filter(status='True')
+    it_articles = articles.filter(category__exact='IT').order_by('?')[:6]
+    math_articles = articles.filter(category__exact='MATH').order_by('?')[:6]
+    ai_articles = articles.filter(category__exact='AI').order_by('?')[:6]
     context = {'it_articles': it_articles, 'math_articles': math_articles, 'ai_articles': ai_articles}
     return render(request, 'main/index.html', context=context)
 
+
+# вывод новостей по категориям с фильтрацией по дате
 def news_all(request):
-    it_articles = Article.objects.filter(category__exact='IT').order_by('-date')
-    math_articles = Article.objects.filter(category__exact='MATH').order_by('-date')
-    ai_articles = Article.objects.filter(category__exact='AI').order_by('-date')
+    articles = Article.objects.filter(status='True')
+    it_articles = articles.filter(category__exact='IT').order_by('-date')
+    math_articles = articles.filter(category__exact='MATH').order_by('-date')
+    ai_articles = articles.filter(category__exact='AI').order_by('-date')
     context = {'it_articles': it_articles, 'math_articles': math_articles, 'ai_articles': ai_articles}
     return render(request, 'news/index.html', context=context)

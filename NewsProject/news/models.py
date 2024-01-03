@@ -41,7 +41,7 @@ class Article(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='Автор')    # Если пользователь удалится, то данное поле будет NULL
     title = models.CharField('Название', max_length=50, validators=[MinLengthValidator(10), MaxLengthValidator(50)])
     anouncement = models.TextField('Аннотация', max_length=250, validators=[MinLengthValidator(10), MaxLengthValidator(250)])
-    text = models.TextField('Текст новости', validators=[MinLengthValidator(30), MaxLengthValidator(500)])
+    text = models.TextField('Текст новости', validators=[MinLengthValidator(30), MaxLengthValidator(1500)])
     date = models.DateTimeField('Дата публикации', auto_created=True)
     date_edit = models.DateTimeField('Дата редактирования', auto_now=True)
     category = models.CharField(choices=categories, max_length=20, verbose_name='Категории')
@@ -49,7 +49,7 @@ class Article(models.Model):
     slug = models.SlugField()
     objects = models.Manager()
     published = PublishedToday()
-    status = models.BooleanField(default=False, verbose_name='Опубликовать')    # Автор добавляет новость и по-умолчанию она не публикуется. Модетатор должен подтвердить публикацию - True
+    status = models.BooleanField(default=False, verbose_name='Опубликовано')    # Автор добавляет новость и по-умолчанию она не публикуется. Модетатор должен подтвердить публикацию - True
 
     #методы моделей
     def __str__(self):
@@ -100,7 +100,7 @@ class Image(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='Новость')
     title = models.CharField(max_length=50, blank=True, verbose_name='Название')
     #image = models.ImageField(upload_to='article_images/')    # лучше добавить поле default !!!
-    image = models.ImageField(default='default_article_img.png', upload_to=folder_path)     # лучше добавить поле default !!!
+    image = models.ImageField(upload_to=folder_path)     # лучше добавить поле default !!!  # default='default_article_img.png',
     objects = models.Manager()
 
     def __str__(self):

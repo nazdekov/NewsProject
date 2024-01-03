@@ -78,10 +78,10 @@
 
 
                     {% if request.user.id %}
-                        {{bookmark}}
-                        <a class="{% if bookmark %}btn btn-warning{% else %}btn btn-outline-warning{% endif %}"
-                           href="{% url 'favorites' article.pk %}">
-                            {% if bookmark %}В избранном{% else %}В избранное{% endif %}</a>
+                        <a href="{% url 'favorites' article.pk %}" class="{% if request.user.id in users %}btn btn-warning{% else %}btn btn-outline-warning{% endif %}">
+                            {% if request.user.id in users and request.user.id in users %}В избранном{% else %}В избранное{% endif %}</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-warning">В избранное</a>
                     {% endif %}
                 </div>
             </div>

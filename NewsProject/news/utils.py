@@ -17,3 +17,19 @@ class ViewCountMixin:
         #если его еще не было - выполнится Create
         ViewCount.objects.get_or_create(article=obj, ip_address=ip_address)
         return obj
+
+
+# from users.models import FavoriteArticle
+# class FavoriteUsersMixin:
+#     def get_users(self):
+#         users = super().get_users()
+#
+#         bookmark = FavoriteArticle.objects.filter(article=current_object.pk)
+
+# class RequestMixin: #(object):
+#     """ Generic mixin to pass request data into context. """
+#     def get_context_data(self, **kwargs):
+#         context = super(RequestMixin, self).get_context_data(**kwargs)
+#         context['request'] = self.request
+#         return context
+#

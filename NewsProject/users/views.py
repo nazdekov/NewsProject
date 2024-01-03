@@ -127,7 +127,7 @@ def index(request):
 from django.core.paginator import Paginator
 def my_news_list(request):
     categories = Article.categories #создали перечень категорий
-    author = User.objects.get(id=request.user.id) #создали перечень авторов
+    author = User.objects.get(id=request.user.id) #фильтр по автору
     articles = Article.objects.filter(author=author)
     if request.method == "POST":
         selected_category = int(request.POST.get('category_filter'))
@@ -143,3 +143,33 @@ def my_news_list(request):
                'categories': categories, 'selected_category': selected_category}
 
     return render(request, 'users/my_news_list.html', context)
+
+def my_favorites_list(request):
+    articles = Article.objects.filter(favoritearticle__user=request.user)
+    categories = Article.categories #создали перечень категорий
+    author_list = User.objects.filter(article__isnull=False).filter(article__status=True).distinct() #создали перечень авторов
+    selected_author = request.session.get('author_filter')
+    selected_category = request.session.get('category_filter')
+    selected_author = 0 if selected_author == None else selected_author
+    selected_category = 0 if selected_category == None else selected_category
+
+    if request.method == "POST": #при обработке POST - мы только сохраняяем в сессию выбранных авторов
+        selected_author = int(request.POST.get('author_filter'))
+        selected_category = int(request.POST.get('category_filter'))
+        request.session['author_filter'] = selected_author
+        request.session['category_filter'] = selected_category
+        return redirect('my_favorites_list')
+    else: #если страница открывется впервые или нас переадресовала сюда функция поиск
+        if selected_author != 0:  # если не пустое - находим нужные новости
+            articles = articles.filter(author=selected_author)
+        if selected_category != 0:  # фильтруем найденные по авторам результаты по категориям
+            articles = articles.filter(category__icontains=categories[selected_category - 1][0])
+
+    total = len(articles)
+    p = Paginator(articles, 6)
+    page_number = request.GET.get('page')
+    page_obj = p.get_page(page_number)
+    context = {'articles': page_obj, 'author_list': author_list, 'selected_author': selected_author,
+               'categories': categories, 'selected_category': selected_category, 'total': total}
+
+    return render(request, 'users/my_favorites_list.html', context)

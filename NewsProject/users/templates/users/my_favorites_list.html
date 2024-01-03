@@ -2,7 +2,7 @@
 {% load static %}
 {% load bootstrap5 %}
 {% bootstrap_javascript %}
-{% block title %}Мои статьи{% endblock %}
+{% block title %}Избранное{% endblock %}
 
 <!-- {% block slider %}
 {% endblock %} -->
@@ -27,7 +27,14 @@
                         <form method="post">
                             {% csrf_token %}
                                     <div class="form-group col-11">
-                                        <select class="form-select" name="category_filter" style="width:80%">
+                                        <select class="form-select" name="author_filter" style="width:40%">
+                                            <option value="0">Все авторы</option>
+                                            {% for author in author_list %}
+                                            <option value="{{ author.id }}" {% if selected_author == author.id %} selected {% endif %}> {{ author.username }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                        <select class="form-select" name="category_filter" style="width:40%">
                                             <option value="0">Все категории</option>
                                             {% for c in categories %}
                                             <option value="{{ forloop.counter }}" {% if selected_category == forloop.counter %} selected {% endif %}> {{ c.1 }}
@@ -89,11 +96,6 @@
                             {% endif %}
                             <h5>Просмотры: {{ article.get_views }}</h5>
                             <h5><span>{{ article.date }}</span></h5>
-                            {% if article.status %}
-                                <h5>Опубликовано: Да</h5>
-                            {% else %}
-                                <h5>Опубликовано: Нет</h5>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -105,9 +107,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section_title text-center mb-30">
-                        <h3>Вы еще не написали ни одной новости из выбранной категории.</h3>
-                        <a class="buttn2 boxed-button2 my-2 my-sm-0" href="{% url 'my_news_list' %}">Назад</a>
-                        <a class="buttn2 boxed-button2 my-2 my-sm-0" href="{% url 'news_create' %}">Хотите создать?</a>
+                        <h3>Вы еще не добавили ни одной новости в избранное.</h3>
+                        <a class="buttn2 boxed-button2 my-2 my-sm-0" href="{% url 'news_index' %}">Все новости</a>
                     </div>
                 </div>
             </div>

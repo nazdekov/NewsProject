@@ -27,12 +27,12 @@ class ArticleImageInline(admin.TabularInline):
     extra = 3
     readonly_fields = ('id', 'image_tag')
 
-
+@admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    ordering = ['-date', 'title', 'author']
-    list_display = ['title', 'author', 'date', 'symbols_count', 'image_tag']
-    list_filter = ['date', ArticleFilter]
-    list_display_links = ('date',)
+    ordering = ['-date', 'title', 'author', 'status']
+    list_display = ['title', 'category', 'author', 'date', 'symbols_count', 'status', 'image_tag']
+    list_filter = ['date', 'status', ArticleFilter]
+    list_display_links = ('title', 'category', 'date',)
     search_fields = ['title__startswith', 'tags__title']
     filter_horizontal = ['tags']
     # list_editable = ['author']
@@ -40,6 +40,10 @@ class ArticleAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     list_per_page = 5
     inlines = [ArticleImageInline,]
+    actions = ['set_true']
+
+
+
     @admin.display(description='Длина', ordering='_symbols')
     def symbols_count(self, article: Article):
         return f"Символы: {len(article.text)}"
@@ -49,21 +53,17 @@ class ArticleAdmin(admin.ModelAdmin):
         queryset = queryset.annotate(_symbols=Length('text'))
         return queryset
 
+    @admin.action(description='Опубликовать выбранные новости')
+    def set_true(self, request, queryset):
+        amount = queryset.update(status=True)
+        self.message_user(request, f'Опубликовано {amount} новостей')
+
+
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ['title', 'status', 'tag_count']
     list_filter = ['title', 'status']
     actions = ['set_true']
-
-
-    # @admin.display(description='Использований:', ordering='tag_count')
-    # def tag_count(self, object):
-    #     return object.tag_count
-
-    # def get_queryset(self, request):
-    #     queryset = super().get_queryset(request)
-    #     queryset = queryset.annotate(tag_count=Count('article'))
-    #     return queryset
 
     @admin.action(description='Активировать выбранные теги')
     def set_true(self, request, queryset):
@@ -72,7 +72,7 @@ class TagAdmin(admin.ModelAdmin):
 
 
 # admin.site.register(Tag,TagAdmin)
-admin.site.register(Article, ArticleAdmin)
+#admin.site.register(Article, ArticleAdmin)
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):

@@ -38,6 +38,6 @@ class ArticleForm(ModelForm):
             'title': Textarea(attrs={'cols': 80, 'rows': 1, 'minlength': 10}),
             'anouncement': Textarea(attrs={'cols': 80, 'rows': 2, 'minlength': 10}),
             'text': Textarea(attrs={'cols': 80, 'rows': 5, 'minlength': 30}),
-            'tags': CheckboxSelectMultiple(),
+            'tags': CheckboxSelectMultiple(attrs={'cols': 50, 'rows': 5}),
             'category': forms.Select(attrs={"class": "form-control"}),
         }

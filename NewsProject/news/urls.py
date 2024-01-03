@@ -10,5 +10,5 @@ urlpatterns = [
     path('update/<int:pk>', views.ArticleUpdateView.as_view(), name='news_update'),
     path('delete/<int:pk>', views.ArticleDeleteView.as_view(), name='news_delete'),
     path('create/', views.create_article, name='news_create'),
-    path('search', views.search, name='search'),
+    path('search/', views.search, name='search'),
 ]
