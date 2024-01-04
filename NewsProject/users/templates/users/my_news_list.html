@@ -74,7 +74,11 @@
                     <a href="{{ article.get_absolute_url }}">
                     <div class="single_delicious d-flex align-items-center">
                         <div class="thumb">
-                            <img src="{{ article.image_set.all.0.image.url }}" alt="{{ article.title }}" style="height:200px; width:auto;">
+                            {% if article.image_set.all %}
+                                <img src="{{ article.image_set.all.0.image.url }}" alt="{{ article.title }}">
+                            {% else %}
+                                <img class="d-block" src="/media/default_article_img.png" alt="{{ article.title }}">
+                            {% endif %}
                         </div>
                         <div class="info">
                             {% if article.title|length > 25 %}

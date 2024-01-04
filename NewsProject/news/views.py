@@ -56,7 +56,6 @@ def get_bookmark_user(request):
 
 from users.models import FavoriteArticle
 from .utils import ViewCountMixin
-# from .utils import RequestMixin
 class ArticleDetailView(ViewCountMixin, DetailView):
     model = Article
     template_name = 'news/news_detail.html'
@@ -115,10 +114,10 @@ class ArticleUpdateView(UpdateView):
                     Image.objects.create(article=current_object, image=img, title=img.name)
                 del request.FILES[field_replace] #удаляем использованный файл
         if request.FILES: #Добавление нового изображения
-            print('!!!!!!!!!!!!!!!!!', request.FILES)
+            #print('!!!!!!!!!!!!!!!!!', request.FILES)
             for input_name in request.FILES:
                 for img in request.FILES.getlist(input_name):
-                    print('###############', img)
+                    #print('###############', img)
                     Image.objects.create(article=current_object, image=img, title=img.name)
 
 
@@ -148,7 +147,7 @@ def create_article(request):
                 form.save_m2m() #сохраняем теги
                 for img in request.FILES.getlist('image_field'):
                     Image.objects.create(article=new_article, image=img, title=img.name)
-                return redirect('news_index')
+                return redirect('my_news_list')
     else:
         form = ArticleForm()
     return render(request, 'news/create_article.html', {'form': form})
@@ -177,7 +176,7 @@ def news_index(request):
 
         # Фильтр по поиску
         search_input = request.session.get('search_input')  # вытаскиваем из сессии значение поиска
-        print('!!!!!!!!!!!!!!!!!!!!!!', 'search_input', search_input)
+        #print('!!!!!!!!!!!!!!!!!!!!!!', 'search_input', search_input)
         if search_input != None:  # если не пустое - находим нужные новости
             articles = Article.objects.filter(title__icontains=search_input)
             selected_author = 0
@@ -193,21 +192,6 @@ def news_index(request):
     # фильтр по публикации и сортировка от свежих к старым новостям
     articles = articles.filter(status='True').order_by('-date')
     total = len(articles)
-    #if total == 1: #если одна- сразу открываем подробное отображение новости
-    #    if search_input != None:  # если не пустое - находим нужные новости
-    #        del request.session['search_input']  # чистим сессию, чтобы этот фильтр не "заело"
-    #    del request.session['author_filter']
-    #    del request.session['category_filter']
-    #    return render(request, 'news/news_detail.html', {'article': articles[0]})
-    #
-    #else:
-    #    p = Paginator(articles, 6)
-    #    page_number = request.GET.get('page')
-    #    page_obj = p.get_page(page_number)
-    #    context = {'articles': page_obj, 'author_list': author_list, 'selected_author': selected_author,
-    #               'categories': categories, 'selected_category': selected_category, 'total': total}
-    #
-    #    return render(request, 'news/index.html', context)
     p = Paginator(articles, 6)
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)

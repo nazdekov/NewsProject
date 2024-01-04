@@ -95,11 +95,7 @@ class Article(models.Model):
         if not self.id:
             # Эта ветвь срабатыет при создании новости
             #self.slug = slugify(unidecode(self.title))
-            image = Image.objects.filter(article=self)
-            if image:
-                print('!@!@ image True')
-            else:
-                print('!@!@ image False')
+            pass
 
         super(Article, self).save(*args, **kwargs)
 

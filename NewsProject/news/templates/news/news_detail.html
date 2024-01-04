@@ -32,30 +32,35 @@
         <img src="{% static 'main' %}/img/icon/3.png" width="auto" height="50" alt="">
     </div>
 
-                                <!-- Slider -->
-                                <div class="thumb">
-                                    {% if article.image_set.all %}
-                                        <div id="carouselControls" class="carousel slide" data-ride="carousel">
-                                            <div class="carousel-inner" role="listbox" style=" width:auto; height: 300px; !important;">
-                                                {% for image in article.image_set.all %}
-                                                <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
-                                                    <img class="d-block" src="{{ image.image.url }}"
-                                                         style="margin:auto; height:300px; width:auto; border-radius:5px;">
-                                                </div>
-                                                {% endfor %}
-                                            </div>
-                                            <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
-                                                <span class="carousel-control-prev-icon" style="border-radius:5px; background: #DB9A64" aria-hidden="true"></span>
-                                                <span class="sr-only">Previous</span>
-                                            </a>
-                                            <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
-                                                <span class="carousel-control-next-icon" style="border-radius:5px; background: #DB9A64" aria-hidden="true"></span>
-                                                <span class="sr-only">Next</span>
-                                            </a>
-                                        </div>
-                                    {% endif%}
-                                </div>
-                                <!-- /Slider -->
+    <!-- Slider -->
+    <div class="thumb">
+        <div id="carouselControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner" role="listbox">
+                {% if article.image_set.all %}
+                    {% for image in article.image_set.all %}
+                    <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
+                        <img class="d-block" src="{{ image.image.url }}"
+                             style="margin:auto; height:300px; width:auto; border-radius:10px;">
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="carousel-item active">
+                        <img class="d-block" src="/media/default_article_img.png"
+                             style="margin:auto; height:300px; width:auto; border-radius:10px;">
+                    </div>
+                {% endif %}
+            </div>
+                <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" style="border-radius:5px; background: #DB9A64" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" style="border-radius:5px; background: #DB9A64" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+        </div>
+    </div>
+    <!-- /Slider -->
 
     <div class="container">
         <div class="row align-items-center">
@@ -64,6 +69,7 @@
                     <h3>{{ article.title }}</h3>
                     <span class="long_dash"></span>
                     <h4>{{ article.anouncement }}</h4>
+                    <span class="long_dash"></span>
                     <h4>{{ article.text }}</h4>
                     <br>
                     <h5>Автор: {{ article.author }}</h5>

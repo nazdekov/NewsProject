@@ -2997,6 +2997,9 @@ h3 {
 
 /* line 71, ../../Arafath/CL/Cl November/225. Restaurant-02/HTML/scss/_delicious.scss */
 .Delicious_area .single_delicious .thumb img {
+  object-fit: cover;
+  width: 230px;
+  height: 230px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
