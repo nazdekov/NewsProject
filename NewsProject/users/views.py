@@ -135,6 +135,8 @@ def my_news_list(request):
             articles = articles.filter(category__icontains=categories[selected_category-1][0])
     else: #если страница открывется впервые
         selected_category = 0
+
+    articles = articles.order_by('-date')
     total = len(articles)
     p = Paginator(articles, 6)
     page_number = request.GET.get('page')
@@ -147,7 +149,8 @@ def my_news_list(request):
 def my_favorites_list(request):
     articles = Article.objects.filter(favoritearticle__user=request.user)
     categories = Article.categories #создали перечень категорий
-    author_list = User.objects.filter(article__isnull=False).filter(article__status=True).distinct() #создали перечень авторов
+    author_list = User.objects.filter(article__isnull=False).filter(article__status=True).filter(favoritearticle__isnull=False).distinct() #создали перечень авторов
+
     selected_author = request.session.get('author_filter')
     selected_category = request.session.get('category_filter')
     selected_author = 0 if selected_author == None else selected_author
@@ -165,6 +168,7 @@ def my_favorites_list(request):
         if selected_category != 0:  # фильтруем найденные по авторам результаты по категориям
             articles = articles.filter(category__icontains=categories[selected_category - 1][0])
 
+    articles = articles.order_by('-date')
     total = len(articles)
     p = Paginator(articles, 6)
     page_number = request.GET.get('page')

@@ -33,6 +33,9 @@ class PublishedToday(models.Manager):
     def get_queryset(self):
         return super(PublishedToday, self).get_queryset().filter(date__gte=datetime.date.today())
 
+
+from unidecode import unidecode
+from django.template.defaultfilters import slugify
 class Article(models.Model):
     categories = [('IT', 'IT'),
                   ('MATH', 'Mathematic'),
@@ -50,6 +53,7 @@ class Article(models.Model):
     objects = models.Manager()
     published = PublishedToday()
     status = models.BooleanField(default=False, verbose_name='Опубликовано')    # Автор добавляет новость и по-умолчанию она не публикуется. Модетатор должен подтвердить публикацию - True
+
 
     #методы моделей
     def __str__(self):
@@ -86,15 +90,28 @@ class Article(models.Model):
         super(Article, self).delete(*args, **kwargs)
 
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(unidecode(self.title))    # Генерирует Slug при создании или редактировании
+        if not self.id:
+            # Эта ветвь срабатыет при создании новости
+            #self.slug = slugify(unidecode(self.title))
+            image = Image.objects.filter(article=self)
+            if image:
+                print('!@!@ image True')
+            else:
+                print('!@!@ image False')
+
+        super(Article, self).save(*args, **kwargs)
+
+
     class Meta:
-        ordering = ['title', 'date']    # Порядок сортировки
+        ordering = ['date', 'title']    # Порядок сортировки
         verbose_name = 'Новость'
         verbose_name_plural = 'Новости'
 
 
 class Image(models.Model):
     def folder_path(instance, filename):
-        print('!!!!, instance', instance, '!!!!, filename', filename)
         return f"article_images/article_{instance.article.pk}/{filename}"
 
     article = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='Новость')

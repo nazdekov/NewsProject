@@ -144,7 +144,6 @@ def create_article(request):
                 new_article = form.save(commit=False)
                 new_article.author = current_user
                 new_article.date = datetime.date.today()
-                new_article.status = True    # Этот параметр публикует новость без модерации
                 new_article.save() #сохраняем в БД
                 form.save_m2m() #сохраняем теги
                 for img in request.FILES.getlist('image_field'):
