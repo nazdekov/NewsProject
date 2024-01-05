@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 #человек не аутентифицирован - отправляем на страницу другую
 
 import json
-#URL:    path('search_auto/', views.search_auto, name='search_auto'),
 
 def search_auto(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
