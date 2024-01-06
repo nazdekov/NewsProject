@@ -10,7 +10,6 @@ import hashlib
 import hmac
 from django.http import HttpResponseServerError
 
-
 def verify_signature(payload_body, secret_token, signature_header):
     """Verify that the payload was sent from GitHub by validating SHA256.
 
@@ -27,7 +26,6 @@ def verify_signature(payload_body, secret_token, signature_header):
     expected_signature = "sha256=" + hash_object.hexdigest()
     if not hmac.compare_digest(expected_signature, signature_header):
         return HttpResponseServerError("Request signatures didn't match!", status=403)
-
 
 
 @csrf_exempt
