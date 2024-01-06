@@ -21,12 +21,14 @@
     <link rel="stylesheet" href="{% static 'main' %}/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'main' %}/css/themify-icons.css">
     <link rel="stylesheet" href="{% static 'main' %}/css/gijgo.css">
-    <!-- <link rel="stylesheet" href="{% static 'main' %}/css/nice-select.css"> -->
     <link rel="stylesheet" href="{% static 'main' %}/css/flaticon.css">
     <link rel="stylesheet" href="{% static 'main' %}/css/slicknav.css">
-    <!-- <link rel="stylesheet" href="{% static 'main' %}/css/style_sidebar.css"> -->
     <link rel="stylesheet" href="{% static 'main' %}/css/style.css">
+    {% comment %}
+    <!-- <link rel="stylesheet" href="{% static 'main' %}/css/style_sidebar.css"> -->
+    <!-- <link rel="stylesheet" href="{% static 'main' %}/css/nice-select.css"> -->
     <!-- <link rel="stylesheet" href="{% static 'main' %}/css/responsive.css"> -->
+    {% endcomment %}
     <script src="https://kit.fontawesome.com/a97047fead.js" crossorigin="anonymous"></script>
 
     <!-- CSS Search !-->
@@ -51,9 +53,7 @@
 {% block content %}{% endblock %}
 
 
-{% block foot %}
-    {% include 'main/foot.html' %}
-{% endblock %}
+{% include 'main/foot.html' %}
 
 
 </body>

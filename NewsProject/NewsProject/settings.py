@@ -30,12 +30,12 @@ SECRET_KEY = env("SECRET_KEY")
 
 # Для проверки своей страницы 404, конфигурация такая:
 # python manage.py runserver --insecure
-# DEBUG = False
-# ALLOWED_HOSTS = ["*"]
-#В режиме отладки такая:
-DEBUG = True
+DEBUG = False
+ALLOWED_HOSTS = ["*"]
 
-ALLOWED_HOSTS = []
+#В режиме отладки такая:
+#DEBUG = True
+#ALLOWED_HOSTS = []
 
 
 
@@ -135,13 +135,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
-#STATIC_ROOT = BASE_DIR / "static"
-STATICFILES_DIRS = [
-    BASE_DIR / "static/",
-    #"news/static",
-]
-
 # Полный сброс миграции таблиц
 # python manage.py migrate --fake-initial
 # python manage.py flush - полный сброс базы включая суперпользователей
@@ -150,9 +143,25 @@ STATICFILES_DIRS = [
 python manage.py migrate --fake MyApp zero
 python manage.py makemigrations
 '''
+# python NewsProject/manage.py collectstatic
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static"
+STATICFILES_DIRS = [
+    # BASE_DIR / "static/",
+    # BASE_DIR / "media/",
+    # BASE_DIR / "main/static",
+    # BASE_DIR / "news/static",
+]
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# STATICFILES_FINDERS = [
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+# ]
+#
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 
 # Default primary key field type
