@@ -31,18 +31,16 @@ from django.http import HttpResponseServerError
 
 
 @csrf_exempt
-def update_server(request):	   # Тест
-    return HttpResponse('Хук работает')
-
+def update_server(request):
     # header_signature = request.META.get('HTTP_X_HUB_SIGNATURE')
     # verify_signature(request.body, settings.GITHUB_WEBHOOK_KEY, header_signature)
-    # if request.method == "POST":
-    #     local_dir = '/home/nazdekov/NewsProject/'    # local dir это где лежит .git
-    #     repo = git.Repo(local_dir)
-    #     repo.remotes.origin.pull()
-    #     return HttpResponse("PythonAnywhere server updated successfully")
-    # else:
-    #     return HttpResponse("Вы попали не туда")
+    if request.method == "POST":
+        local_dir = '/home/nazdekov/NewsProject/'    # local dir это где лежит .git
+        repo = git.Repo(local_dir)
+        repo.remotes.origin.pull()
+        return HttpResponse("PythonAnywhere server updated successfully")
+    else:
+        return HttpResponse("Вы попали не туда")
 
 
 def about(request):
