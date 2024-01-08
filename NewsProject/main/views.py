@@ -38,7 +38,7 @@ def update_server(request):
         repo.remotes.origin.pull()
         return HttpResponse("PythonAnywhere server updated successfully")
     else:
-        return redirect('home')
+        return HttpResponse('wrong event type')
 
 
 def about(request):
