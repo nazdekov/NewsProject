@@ -59,7 +59,6 @@ class ArticleDetailView(ViewCountMixin, DetailView):
         images = Image.objects.filter(article=current_object)
         context['images'] = images
 
-        # print('!!!!!!, context', context)
         return context
 
 
