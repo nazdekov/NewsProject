@@ -93,7 +93,7 @@ def registration(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             messages.success(request, f'{username} был зарегистрирован!')
-
+            print('!!!!!, Регистрация почти завершена')
             return redirect('home')
     else:
         form = UserCreationForm()

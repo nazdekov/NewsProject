@@ -2,6 +2,8 @@ from django import forms
 
 from django.forms import ModelForm, Textarea, CheckboxSelectMultiple
 from .models import *
+# from tinymce import TinyMCE
+
 
 class MultipleFileInput(forms.ClearableFileInput):
     #для множественного выбора изображений
@@ -38,6 +40,7 @@ class ArticleForm(ModelForm):
             'title': Textarea(attrs={'cols': 80, 'rows': 1, 'minlength': 10}),
             'anouncement': Textarea(attrs={'cols': 80, 'rows': 2, 'minlength': 10}),
             'text': Textarea(attrs={'cols': 80, 'rows': 5, 'minlength': 30}),
-            'tags': CheckboxSelectMultiple(attrs={'cols': 50, 'rows': 5}),
+            'tags': CheckboxSelectMultiple(attrs={'cols': 50, 'rows': 3}),
             'category': forms.Select(attrs={"class": "form-control"}),
         }
+

@@ -38,13 +38,13 @@ from unidecode import unidecode
 from django.template.defaultfilters import slugify
 class Article(models.Model):
     categories = [('IT', 'IT'),
-                  ('MATH', 'Mathematic'),
+                  ('SPORT', 'Sport'),
                   ('AI', 'AI')]
     #поля                           #models.CASCADE SET_DEFAULT    # Если пользователь удалится, то удалятся все его новости
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='Автор')    # Если пользователь удалится, то данное поле будет NULL
-    title = models.CharField('Название', max_length=50, validators=[MinLengthValidator(10), MaxLengthValidator(50)])
+    title = models.CharField('Название', max_length=100, validators=[MinLengthValidator(10), MaxLengthValidator(100)])
     anouncement = models.TextField('Аннотация', max_length=250, validators=[MinLengthValidator(10), MaxLengthValidator(250)])
-    text = models.TextField('Текст новости', validators=[MinLengthValidator(30), MaxLengthValidator(1500)])
+    text = models.TextField('Текст новости', validators=[MinLengthValidator(30), MaxLengthValidator(10000)])
     date = models.DateTimeField('Дата публикации', auto_created=True)
     date_edit = models.DateTimeField('Дата редактирования', auto_now=True)
     category = models.CharField(choices=categories, max_length=20, verbose_name='Категории')
@@ -64,7 +64,7 @@ class Article(models.Model):
     #метаданные модели
 
 
-    def tag_list(self):    # не работает, пока что
+    def tag_list(self):
         s = ''
         for t in self.tags.all():
             s += '|' + t.title + ' '
@@ -140,6 +140,7 @@ class ViewCount(models.Model):
 
     class Meta:
         verbose_name = 'Счетчик просмотров'
+        verbose_name_plural = 'Счетчик просмотров'
         ordering = ('-view_date',)
         indexes = [models.Index(fields=['-view_date'])]
 

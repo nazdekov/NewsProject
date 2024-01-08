@@ -7,7 +7,7 @@ urlpatterns = [
     path('update_server/', views.update_server, name='update_server'),
     path('about/', views.about, name='about'),
     path('contacts/', views.contacts, name='contacts'),
-    path('calc/<int:a>/<slug:operation>/<int:b>', views.get_calc),
+    # path('calc/<int:a>/<slug:operation>/<int:b>', views.get_calc),
 ]
 
 

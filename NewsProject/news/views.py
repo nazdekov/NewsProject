@@ -1,9 +1,8 @@
 from django.shortcuts import render, HttpResponse, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from .models import *
 from .forms import *
 from users.utils import * #импортировли декоратор
-from django.db import connection, reset_queries
 from django.views.generic import DetailView, DeleteView, UpdateView
 from django.contrib.auth.decorators import login_required
 #человек не аутентифицирован - отправляем на страницу другую
@@ -26,21 +25,6 @@ def search_auto(request):
 def search(request):
     if request.method == 'POST': #пришел запрос из меню поиска
         value = request.POST['search_input'] #находим новости
-        #articles = Article.objects.filter(title__icontains=value)
-        #if len(articles) == 1: #если одна- сразу открываем подробное отображение новости
-        #    return render(request, 'news/news_detail.html', {'article': articles[0]})
-        #else:
-            #если несколько - отправляем человека в функцию index со страницей-списком новостей и фильтрами
-            #не забываем передать поисковый запрос:
-            # либо через сессии:
-        #    request.session['search_input'] = value
-        #    return redirect('news_index')
-            #либо через фрагмент URLссылки:
-            # но в таком случае придётся обрабатывать ссылку в Urls
-            #функция reverse из модуля Urls добавит переданные аргументы в качестве get-аргументов.
-            # return redirect(reverse('news', kwargs={'search_input':value}))
-
-            # return render(request, 'news/news_list.html', {'articles': articles})
         request.session['search_input'] = value
         return redirect('news_index')
     else:
@@ -152,7 +136,6 @@ def create_article(request):
     return render(request, 'news/create_article.html', {'form': form})
 
 
-#from django.db.models import Q
 from django.core.paginator import Paginator
 def news_index(request):
     categories = Article.categories #создали перечень категорий
@@ -204,17 +187,7 @@ def news_index(request):
 def main_index(request):
     articles = Article.objects.filter(status='True')
     it_articles = articles.filter(category__exact='IT').order_by('?')[:6]
-    math_articles = articles.filter(category__exact='MATH').order_by('?')[:6]
+    sport_articles = articles.filter(category__exact='SPORT').order_by('?')[:6]
     ai_articles = articles.filter(category__exact='AI').order_by('?')[:6]
-    context = {'it_articles': it_articles, 'math_articles': math_articles, 'ai_articles': ai_articles}
+    context = {'it_articles': it_articles, 'sport_articles': sport_articles, 'ai_articles': ai_articles}
     return render(request, 'main/index.html', context=context)
-
-
-# вывод новостей по категориям с фильтрацией по дате
-def news_all(request):
-    articles = Article.objects.filter(status='True')
-    it_articles = articles.filter(category__exact='IT').order_by('-date')
-    math_articles = articles.filter(category__exact='MATH').order_by('-date')
-    ai_articles = articles.filter(category__exact='AI').order_by('-date')
-    context = {'it_articles': it_articles, 'math_articles': math_articles, 'ai_articles': ai_articles}
-    return render(request, 'news/index.html', context=context)

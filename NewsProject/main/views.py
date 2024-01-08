@@ -1,5 +1,5 @@
 from django.core.mail import EmailMultiAlternatives
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from django.template.loader import get_template
 
 from .forms import ContactForm
@@ -38,7 +38,7 @@ def update_server(request):
         repo.remotes.origin.pull()
         return HttpResponse("PythonAnywhere server updated successfully")
     else:
-        return HttpResponse("Вы попали не туда")
+        return redirect('home')
 
 
 def about(request):
@@ -82,19 +82,19 @@ def custom_404(request, exception):
     context = {}
     return render(request, 'main/404.html', context)
 
-def get_calc(request, a, operation, b):
-    match operation:                    # match - это вместо if, elif, else
-        case 'plus':
-            result = int(a) + int(b)
-        case 'minus':
-            result = int(a) - int(b)
-        case 'multiply':
-            result = int(a) * int(b)
-        case 'divide':
-            result = int(a) / int(b)
-        case 'power':
-            result = int(a) ** int(b)
-        case _:
-            return HttpResponse(f'Неизвестная команда.')
-    return HttpResponse(f'Вы ввели: {a} и {b}<br>Результат "{operation}": {result}.')
+# def get_calc(request, a, operation, b):
+#     match operation:                    # match - это вместо if, elif, else
+#         case 'plus':
+#             result = int(a) + int(b)
+#         case 'minus':
+#             result = int(a) - int(b)
+#         case 'multiply':
+#             result = int(a) * int(b)
+#         case 'divide':
+#             result = int(a) / int(b)
+#         case 'power':
+#             result = int(a) ** int(b)
+#         case _:
+#             return HttpResponse(f'Неизвестная команда.')
+#     return HttpResponse(f'Вы ввели: {a} и {b}<br>Результат "{operation}": {result}.')
 

@@ -70,7 +70,7 @@
                     <span class="long_dash"></span>
                     <h4>{{ article.anouncement }}</h4>
                     <span class="long_dash"></span>
-                    <h4>{{ article.text }}</h4>
+                    <p class>{{ article.text }}</p>
                     <br>
                     <h5>Автор: {{ article.author }}</h5>
                     <h5>Теги: {% for t in article.tags.all %} {{ t.title }} {% endfor %}</h5>

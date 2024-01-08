@@ -1,10 +1,10 @@
 {% extends 'main/base_template.html' %}
 {% load static %}
+{% load users_extras %}
 {% load bootstrap5 %}
 {% load crispy_forms_tags %}
 
-{% block title %} Редактирования профиля {% endblock %}
-{% block sidebar %} {% include 'users/user_panel.html' %} {% endblock %}
+{% block title %} Редактирование профиля {% endblock %}
 
 {% block content %}
 <div class="Delicious_area">
@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-xl-12">
                 <div class="section_title text-center mb-50">
-                    <h3>Редактирования профиля {{ request.user.username }}</h3>
+                    <h3>Редактирование профиля {{ request.user.username }}</h3>
                     <br>
                     <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -26,7 +26,11 @@
                                             {{ account_form.account_image }}
                                             <div class="mt-3">
                                                 <h4> {{ user_form.username }}</h4>
-                                                <p class="text-secondary mb-1"> {% if request.user.is_staff %} Автор {% else %} Читатель {% endif %}</p>
+                                                <p class="text-secondary mb-1">
+                                                {% if request.user.is_superuser or request.user.is_staff %} Администратор
+                                                {% elif request.user|has_group:"Authors" %} Автор
+                                                {% elif request.user|has_group:"Readers" %} Читатель {% endif %}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
