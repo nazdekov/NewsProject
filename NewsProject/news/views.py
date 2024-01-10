@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 import json
 
+
 def search_auto(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         q = request.GET.get('term', '')
@@ -51,10 +52,6 @@ class ArticleDetailView(ViewCountMixin, DetailView):
         # формируем QS-list с id пользователей
         us = FavoriteArticle.objects.filter(article=current_object.pk).select_related('user').values_list('user__id', flat=True)
         context['users'] = us
-
-        #проверям есть ли такая закладка с этой новостью
-        bookmark = FavoriteArticle.objects.filter(article=current_object.pk)
-        context['bookmark'] = bookmark.exists()
 
         images = Image.objects.filter(article=current_object)
         context['images'] = images
@@ -185,6 +182,11 @@ def news_index(request):
 # вывод новостей по категориям, случейные 6
 def main_index(request):
     articles = Article.objects.filter(status='True')
+
+    # us = FavoriteArticle.objects.filter(article=article).select_related('user').values_list('user__id',
+    #                                                                                                   flat=True)
+    # context['users'] = us
+
     it_articles = articles.filter(category__exact='IT').order_by('?')[:6]
     sport_articles = articles.filter(category__exact='SPORT').order_by('?')[:6]
     ai_articles = articles.filter(category__exact='AI').order_by('?')[:6]

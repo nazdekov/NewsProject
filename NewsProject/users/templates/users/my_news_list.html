@@ -30,7 +30,7 @@
                                         <select class="form-select" name="category_filter" style="width:80%">
                                             <option value="0">Все категории</option>
                                             {% for c in categories %}
-                                            <option value="{{ forloop.counter }}" {% if selected_category == forloop.counter %} selected {% endif %}> {{ c.1 }}
+                                            <option value="{{ forloop.counter }}" {% if category_filter == forloop.counter %} selected {% endif %}> {{ c.1 }}
                                             </option>
                                             {% endfor %}
                                         </select>
@@ -68,41 +68,7 @@
         </div>
     </div>
     <div class="container">
-        <div class="row">
-            {% for article in articles %}
-                <div class="col-xl-6 col-md-6 col-lg-6">
-                    <a href="{{ article.get_absolute_url }}">
-                    <div class="single_delicious d-flex align-items-center">
-                        <div class="thumb">
-                            {% if article.image_set.all %}
-                                <img src="{{ article.image_set.all.0.image.url }}" alt="{{ article.title }}">
-                            {% else %}
-                                <img class="d-block" src="/media/default_article_img.png" alt="{{ article.title }}">
-                            {% endif %}
-                        </div>
-                        <div class="info">
-                            {% if article.title|length > 25 %}
-                                <h3>{{ article.title|slice:":25" }}...</h3>
-                            {% else %}
-                                <h3>{{ article.title }}</h3>
-                            {% endif %}
-                            {% if article.anouncement|length > 50 %}
-                                <h4>{{ article.anouncement|slice:":50" }}...</h4>
-                            {% else %}
-                                <h4>{{ article.anouncement }}</h4>
-                            {% endif %}
-                            <h5>Просмотры: {{ article.get_views }}</h5>
-                            <h5><span>{{ article.date }}</span></h5>
-                            {% if article.status %}
-                                <h5>Опубликовано: Да</h5>
-                            {% else %}
-                                <h5>Опубликовано: Нет</h5>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+        {% include 'news/news_random_main.html' with articles=articles %}
     </div>
     {% else %}
         <div class="container">

@@ -130,11 +130,11 @@ def my_news_list(request):
     author = User.objects.get(id=request.user.id) #фильтр по автору
     articles = Article.objects.filter(author=author)
     if request.method == "POST":
-        selected_category = int(request.POST.get('category_filter'))
-        if selected_category != 0: #фильтруем найденные результаты по категориям
-            articles = articles.filter(category__icontains=categories[selected_category-1][0])
+        category_filter = int(request.POST.get('category_filter'))
+        if category_filter != 0: #фильтруем найденные результаты по категориям
+            articles = articles.filter(category__icontains=categories[category_filter-1][0])
     else: #если страница открывется впервые
-        selected_category = 0
+        category_filter = 0
 
     articles = articles.order_by('-date')
     total = len(articles)
@@ -142,7 +142,7 @@ def my_news_list(request):
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)
     context = {'articles': page_obj, 'total': total,
-               'categories': categories, 'selected_category': selected_category}
+               'categories': categories, 'category_filter': category_filter}
 
     return render(request, 'users/my_news_list.html', context)
 
@@ -150,6 +150,9 @@ def my_favorites_list(request):
     articles = Article.objects.filter(favoritearticle__user=request.user)
     categories = Article.categories #создали перечень категорий
     author_list = User.objects.filter(article__isnull=False).filter(article__status=True).filter(favoritearticle__isnull=False).distinct() #создали перечень авторов
+
+    # authors = Article.author.nickname().distinct()
+    print('!!!!!!!!!!!!!!!!!, author_list', author_list)
 
     selected_author = request.session.get('author_filter')
     selected_category = request.session.get('category_filter')

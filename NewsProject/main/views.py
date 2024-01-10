@@ -1,5 +1,5 @@
 from django.core.mail import EmailMultiAlternatives
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse
 from django.template.loader import get_template
 
 from .forms import ContactForm
@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import hashlib
 import hmac
 from django.http import HttpResponseServerError
+
 
 def verify_signature(payload_body, secret_token, signature_header):
     """Verify that the payload was sent from GitHub by validating SHA256.

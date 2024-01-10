@@ -53,7 +53,7 @@ function init () {
     myMap.geoObjects.add(myPlacemark);
 
     // Показываем хинт на карте (без привязки к геообъекту).
-    myMap.hint.show(myMap.getCenter(), "Содержимое хинта", {
+    myMap.hint.show(myMap.getCenter(), "Наше местоположение", {
         // Опция: задержка перед открытием.
         showTimeout: 1500
     });
@@ -62,6 +62,32 @@ function init () {
 
         </div>
 
+        <div class="col-lg-3 offset-lg-1">
+            <div class="media contact-info">
+                <span class="contact-info__icon"><i class="ti-home"></i></span>
+                <div class="media-body">
+                    <h3>ул. Мира, д.8.</h3>
+                    <p>г. Краснотурьинск</p>
+                </div>
+            </div>
+            <div class="media contact-info">
+                <span class="contact-info__icon"><i class="ti-home"></i></span>
+                <div class="media-body">
+                    <h3>ул. Мира, д.88.</h3>
+                    <p>г. Краснотурьинск</p>
+                </div>
+            </div>
+            <div class="media contact-info">
+                <span class="contact-info__icon"><i class="ti-home"></i></span>
+                <div class="media-body">
+                    <h3>ул. Мира, д.888.</h3>
+                    <p>г. Краснотурьинск</p>
+                </div>
+            </div>
+        </div>
+
+
+        {% comment %}
         <div class="row">
             <div class="col-12">
                 <h2 class="contact-title">Напишите нам</h2>
@@ -136,6 +162,8 @@ function init () {
                 </div>
             </div>
         </div>
+        {% endcomment %}
+
     </div>
 </section>
 <!-- ================ contact section end ================= -->
