@@ -30,12 +30,12 @@ GITHUB_WEBHOOK_KEY = env("GITHUB_WEBHOOK_KEY")
 
 # Для проверки своей страницы 404, конфигурация такая:
 # python manage.py runserver --insecure
-# DEBUG = False
-# ALLOWED_HOSTS = ["*"]
+DEBUG = False
+ALLOWED_HOSTS = ["*"]
 
 #В режиме отладки такая:
-DEBUG = True
-ALLOWED_HOSTS = []
+# DEBUG = True
+# ALLOWED_HOSTS = []
 
 
 
